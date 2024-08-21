@@ -81,7 +81,7 @@ export class UsersController {
     }
   }
 
-  async update(request: Request, response: Response) {
+  async patch(request: Request, response: Response) {
     try {
       const { id } = request.params;
       const body = request.body;
@@ -96,7 +96,7 @@ export class UsersController {
         });
       }
 
-      await this.userService.update(Number(id), body);
+      await this.userService.patch(Number(id), body);
       return response.status(204).send("Usuário atualizado com sucesso.");
     } catch (error: any) {
       return response.status(500).json({

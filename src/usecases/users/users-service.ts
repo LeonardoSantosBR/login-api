@@ -73,7 +73,7 @@ export class UserService {
     return data;
   }
 
-  async update(id: number, data: UserDto) {
+  async patch(id: number, data: UserDto) {
     await this.userRepository.update({
       where: {
         id: id,
