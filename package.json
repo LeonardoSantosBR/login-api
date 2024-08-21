@@ -4,18 +4,25 @@
   "description": "password-generator-api",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "prisma-push-mysql": "npx prisma db push --schema prisma/schema.prisma",
+    "prisma-generate-mysql": "npx prisma generate --schema prisma/schema.prisma"
   },
   "author": "Leonardo Santos",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.18.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "joi": "^17.13.3",
+    "mysql": "^2.18.1",
+    "prisma": "^5.18.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/mysql": "^2.15.26",
     "nodemon": "^3.1.4",
     "typescript": "^5.5.4"
   }
