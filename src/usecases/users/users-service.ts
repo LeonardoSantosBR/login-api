@@ -11,6 +11,7 @@ export class UserService {
   async create(data: UserDto) {
     const newUser = await this.userRepository.create({
       data: {
+        name: data.name,
         email: data.email,
         password: bcrypt.hashSync(data.password, 10),
       },

@@ -37,6 +37,8 @@ export class AuthController {
         });
 
       return response.status(200).send({
+        name: user.name,
+        email: user.email,
         accessToken,
         refreshToken,
       });
