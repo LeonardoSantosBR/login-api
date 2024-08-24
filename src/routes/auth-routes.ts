@@ -6,3 +6,5 @@ const authRouter = Router();
 authRouter.post("/signin", (request, response) => {
   return authController.signIn(request, response);
 });
+
+export { authRouter };

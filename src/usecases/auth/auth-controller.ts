@@ -36,10 +36,10 @@ export class AuthController {
           email: user.email,
         });
 
-      return {
+      return response.status(200).send({
         accessToken,
         refreshToken,
-      };
+      });
     } catch (error: any) {
       return response.status(500).send({
         message: error.message || "unexpected error",
