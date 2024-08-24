@@ -21,6 +21,16 @@ export class UsersController {
         });
       }
 
+      const userAlreadyExists = await this.userService.findOneByEmail(
+        body.email
+      );
+
+      if (userAlreadyExists) {
+        return response.status(400).json({
+          message: "Email ja existe",
+        });
+      }
+
       const data = await this.userService.create(body);
 
       return response.status(200).json(data);
