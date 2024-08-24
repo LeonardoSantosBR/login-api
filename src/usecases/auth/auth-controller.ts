@@ -10,8 +10,7 @@ export class AuthController {
 
   async signIn(request: Request, response: Response) {
     try {
-      const { email, password }: { email: string; password: string } =
-        request.body;
+      const { email, password } = request.body;
       const user = await this.userService.findOneByEmail(email);
 
       if (!user) {
