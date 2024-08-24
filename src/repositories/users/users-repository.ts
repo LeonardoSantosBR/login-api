@@ -6,6 +6,7 @@ import {
   findOneParams,
   updateParams,
   deleteParams,
+  findOneUniqueParams,
 } from "../../types/users/users-types";
 
 export class UserRepository {
@@ -23,6 +24,11 @@ export class UserRepository {
 
   async findOne(params: findOneParams) {
     const findedUser = await this.prisma.users.findFirstOrThrow(params);
+    return findedUser;
+  }
+
+  async findOneByEmail(params: findOneUniqueParams) {
+    const findedUser = await this.prisma.users.findUnique(params);
     return findedUser;
   }
 

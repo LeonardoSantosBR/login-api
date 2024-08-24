@@ -9,7 +9,7 @@ datasource db {
 
 model Users {
   id        Int               @id @default(autoincrement())
-  email     String
+  email     String            @unique
   password  String
   createdAt DateTime          @default(now())
   passwords Users_Passwords[]
@@ -18,11 +18,11 @@ model Users {
 }
 
 model Users_Passwords {
-  id                Int       @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   userId            Int
   passwordGenerated String
-  createdAt         DateTime  @default(now())
-  user              Users     @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+  user              Users    @relation(fields: [userId], references: [id])
 
   @@map("users_password")
 }

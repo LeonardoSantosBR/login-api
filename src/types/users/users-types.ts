@@ -20,6 +20,11 @@ export interface findOneParams {
   select?: Prisma.UsersSelect;
 }
 
+export interface findOneUniqueParams {
+  where: Prisma.UsersWhereUniqueInput;
+  select?: Prisma.UsersSelect;
+}
+
 export interface updateParams {
   where: Prisma.UsersWhereUniqueInput;
   data: Prisma.UsersUpdateInput;

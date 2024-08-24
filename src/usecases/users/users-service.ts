@@ -73,6 +73,21 @@ export class UserService {
     return data;
   }
 
+  async findOneByEmail(email: string) {
+    const data = await this.userRepository.findOneByEmail({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
+
+    return data;
+  }
+
   async patch(id: number, data: UserDto) {
     await this.userRepository.update({
       where: {
