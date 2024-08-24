@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { Users } from "@prisma/client";
 import { UserRepository } from "../../repositories/users/users-repository";
 import { UserDto } from "./users-dto";
@@ -9,7 +10,10 @@ export class UserService {
 
   async create(data: UserDto) {
     const newUser = await this.userRepository.create({
-      data: data,
+      data: {
+        email: data.email,
+        password: bcrypt.hashSync(data.password, 10),
+      },
     });
 
     return newUser;
