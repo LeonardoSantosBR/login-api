@@ -68,7 +68,7 @@ export class UsersController {
         return { items: data.items, pagination };
       }
 
-      return data;
+      response.status(200).json(data);
     } catch (error: any) {
       return response.status(500).json({
         message: error.message || "unexpected error",
@@ -83,7 +83,7 @@ export class UsersController {
         Number(request.params.id),
         options
       );
-      return data;
+      response.status(200).json(data);
     } catch (error: any) {
       return response.status(500).json({
         message: error.message || "unexpected error",
