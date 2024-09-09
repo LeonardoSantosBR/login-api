@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { request, Request, Response } from "express";
 import { UserService } from "../users/users-service";
 import { AuthService } from "./auth-service";
 
@@ -42,6 +42,30 @@ export class AuthController {
         accessToken,
         refreshToken,
       });
+    } catch (error: any) {
+      return response.status(500).send({
+        message: error.message || "unexpected error",
+      });
+    }
+  }
+
+  async signToken(request: Request, response: Response) {
+    try {
+      const { token } = request.body;
+
+      if (!token) {
+        return response.status(400).send({
+          message: "Token não enviado.",
+        });
+      }
+
+      const tokenExists = await this.authService.verifyUserByToken(token);
+
+      if (tokenExists) {
+        return response.status(200).send({
+          message: "Usuário logado com sucesso.",
+        });
+      }
     } catch (error: any) {
       return response.status(500).send({
         message: error.message || "unexpected error",
