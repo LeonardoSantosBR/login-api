@@ -18,8 +18,13 @@ export class UserRepository {
   }
 
   async findAll(params: findAllParams) {
-    const query = await this.prisma.users.findMany(params);
-    return query;
+    const [rows, count] = await Promise.all([
+      this.prisma.users.findMany(params),
+      this.prisma.users.count({
+        where: params.where || {},
+      }),
+    ]);
+    return { rows, count };
   }
 
   async findOne(params: findOneParams) {
