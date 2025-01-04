@@ -1,60 +1,53 @@
 import bcrypt from "bcrypt";
-import { Users } from "@prisma/client";
 import { UserRepository } from "../../repositories/users/users-repository";
 import { UserDto } from "./users-dto";
 import { paginationService } from "../../helpers/pagination/pagination-service";
-import { IpaginationService } from "../../types/pagination/Ipagination-service";
+import { usersFilter } from "./filter/users.filter";
+import { paginationPrisma } from "../../helpers/pagination/pagination-prisma";
+import { paginationHelper } from "../../helpers/pagination/pagination-helper";
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(data: UserDto) {
-    const newUser = await this.userRepository.create({
-      data: {
-        name: data.name,
+    const { password, ...rest } = data;
+    
+    const userAlreadyExists = await this.userRepository.findOneByEmail({
+      where: {
         email: data.email,
-        password: bcrypt.hashSync(data.password, 10),
       },
     });
 
+    if (userAlreadyExists) {
+      throw new Error("Email ja existe.");
+    }
+    const newUser = await this.userRepository.create({
+      data: {
+        ...rest,
+        password: bcrypt.hashSync(data.password, 10),
+      },
+    });
     return newUser;
   }
 
-  async findAll({
-    page,
-    limit,
-    where,
-    select,
-    include,
-    orderBy,
-  }: IpaginationService) {
-    const options = paginationService({
-      page,
-      limit,
+  async findAll(query: any) {
+    const page = Number(query?.page);
+    const limit = Number(query?.limit);
+    const orderBy = query?.orderBy;
+    const where = usersFilter(query);
+
+    const data = await this.userRepository.findAll({
       where,
-      select,
-      include,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
       orderBy,
+      ...paginationPrisma(limit, page),
     });
 
-    const [items, count] = await Promise.all([
-      this.userRepository.findAll(options),
-      this.userRepository.findAll({
-        where: options.where || {},
-      }),
-    ]);
-
-    const data: {
-      items: Array<Users>;
-      count: number;
-      totalCount?: number;
-    } = {
-      items: items,
-      count: count.length,
-      totalCount: count.length,
-    };
-
-    return data;
+    return paginationHelper(page, limit, data.count, data);
   }
 
   async findOne(
