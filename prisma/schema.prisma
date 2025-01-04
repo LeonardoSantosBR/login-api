@@ -8,13 +8,24 @@ datasource db {
 }
 
 model Users {
-  id        Int       @id @default(autoincrement())
-  name      String
-  email     String    @unique
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime?
+  id             Int        @id @default(autoincrement())
+  name           String
+  email          String     @unique
+  name_normalize String?    @unique(map: "name_normalize") @default("") @db.VarChar(100)
+  password       String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime?
+  deletedAt      DateTime?
+  UsersToken     UserToken?
 
   @@map("users")
+}
+
+model UserToken {
+  id     Int    @id @default(autoincrement())
+  token  String @unique
+  userId Int    @unique
+  tokens Users  @relation(fields: [userId], references: [id])
+
+  @@map("users_tokens")
 }
