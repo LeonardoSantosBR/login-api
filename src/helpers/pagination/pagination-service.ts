@@ -1,4 +1,4 @@
-import { IpaginationService } from "../../types/pagination/Ipagination-service";
+import { IpaginationService } from "../../types/pagination";
 
 export const paginationService = ({
   page,
@@ -9,15 +9,12 @@ export const paginationService = ({
   orderBy,
 }: any) => {
   const options: IpaginationService = {};
-
   if ((page || page === 0) && limit) {
     options.skip = (page - 1) * limit;
   }
-
   if (limit) {
     options.take = parseInt(limit);
   }
-
   if (where) {
     options.where = where;
   }

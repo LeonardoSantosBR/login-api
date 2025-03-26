@@ -1,17 +1,16 @@
 import bcrypt from "bcrypt";
 import { UserRepository } from "../../repositories/users/users-repository";
 import { UserDto } from "./users-dto";
-import { paginationService } from "../../helpers/pagination/pagination-service";
+import { paginationService } from "../../helpers/pagination";
 import { usersFilter } from "./filter/users.filter";
-import { paginationPrisma } from "../../helpers/pagination/pagination-prisma";
-import { paginationHelper } from "../../helpers/pagination/pagination-helper";
-
+import { paginationPrisma } from "../../helpers/pagination";
+import { paginationHelper } from "../../helpers/pagination";
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(data: UserDto) {
     const { password, ...rest } = data;
-    
+
     const userAlreadyExists = await this.userRepository.findOneByEmail({
       where: {
         email: data.email,
@@ -58,7 +57,7 @@ export class UserService {
       include?: any;
     }
   ) {
-    const optionsService = paginationService({
+    const optionsParams = paginationService({
       where: {
         id: id,
         ...options?.where,
@@ -67,7 +66,7 @@ export class UserService {
       include: options?.include,
     });
 
-    const data = await this.userRepository.findOne(optionsService);
+    const data = await this.userRepository.findOne(optionsParams);
     return data;
   }
 

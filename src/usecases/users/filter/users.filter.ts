@@ -1,18 +1,12 @@
+import { Prisma } from "@prisma/client";
+
 export const usersFilter = (query: any) => {
-  const where: any = {
+  const where: Prisma.UsersWhereInput = {
     deletedAt: null,
   };
 
-  if (query?.name) {
-    where.name = {
-      contains: query.name,
-    };
-  }
-
-  if (query?.email) {
-    where.email = {
-      contains: query.email,
-    };
+  if (query?.search) {
+    where.OR = [{ name: query.search }, { email: query.search }];
   }
 
   return where;
