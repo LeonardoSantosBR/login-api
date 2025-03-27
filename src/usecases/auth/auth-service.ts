@@ -1,5 +1,5 @@
 import { AuthRepository } from "../../repositories/auth/auth-repository";
-import { UsersTokenRepository } from "../../repositories/usersToken/usersToken-repository";
+import { UsersTokenRepository } from "../../repositories/users-token/users-token-repository";
 
 export class AuthService {
   constructor(
@@ -28,8 +28,12 @@ export class AuthService {
       if (!userHasToken) {
         await this.usersTokensRepository.create({
           data: {
-            userId: id,
             token: accessToken,
+            tokens: {
+              connect: {
+                id: id,
+              },
+            },
           },
         });
       } else {

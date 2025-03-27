@@ -6,7 +6,7 @@ import { AuthController } from "./auth-controller";
 //repository
 import { UserRepository } from "../../repositories/users/users-repository";
 import { AuthRepository } from "../../repositories/auth/auth-repository";
-import { UsersTokenRepository } from "../../repositories/usersToken/usersToken-repository";
+import { UsersTokenRepository } from "../../repositories/users-token/users-token-repository";
 
 //services
 import { UserService } from "../users/users-service";

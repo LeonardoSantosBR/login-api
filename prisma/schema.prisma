@@ -16,12 +16,12 @@ model Users {
   createdAt      DateTime   @default(now())
   updatedAt      DateTime?
   deletedAt      DateTime?
-  UsersToken     UserToken?
+  UsersToken     UsersToken?
 
   @@map("users")
 }
 
-model UserToken {
+model UsersToken {
   id     Int    @id @default(autoincrement())
   token  String @unique
   userId Int    @unique

@@ -1,11 +1,11 @@
 import { Prisma } from "@prisma/client";
 
-export interface createParams {
+export interface IcreateParams {
   data: Prisma.UsersCreateInput;
   include?: Prisma.UsersInclude;
 }
 
-export interface findAllParams {
+export interface IfindAllParams {
   where?: Prisma.UsersWhereInput;
   include?: Prisma.UsersInclude;
   select?: Prisma.UsersSelect;
@@ -14,22 +14,22 @@ export interface findAllParams {
   take?: number;
 }
 
-export interface findOneParams {
+export interface IfindOneParams {
   where?: Prisma.UsersWhereInput;
   include?: Prisma.UsersInclude | null;
   select?: Prisma.UsersSelect | null;
 }
 
-export interface findOneUniqueParams {
+export interface IfindOneUniqueParams {
   where: Prisma.UsersWhereUniqueInput;
   select?: Prisma.UsersSelect | null;
 }
 
-export interface updateParams {
+export interface IupdateParams {
   where: Prisma.UsersWhereUniqueInput;
   data: Prisma.UsersUpdateInput;
 }
 
-export interface deleteParams {
+export interface IdeleteParams {
   where: Prisma.UsersWhereUniqueInput;
 }

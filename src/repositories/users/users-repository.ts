@@ -1,23 +1,23 @@
 import { PrismaClient } from "@prisma/client";
 
 import {
-  createParams,
-  findAllParams,
-  findOneParams,
-  updateParams,
-  deleteParams,
-  findOneUniqueParams,
-} from "../../types/users/users-types";
+  IcreateParams,
+  IfindAllParams,
+  IfindOneParams,
+  IupdateParams,
+  IdeleteParams,
+  IfindOneUniqueParams,
+} from "../../types/users/Iusers-types";
 
 export class UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async create(data: createParams) {
+  async create(data: IcreateParams) {
     const newUser = await this.prisma.users.create(data);
     return newUser;
   }
 
-  async findAll(params: findAllParams) {
+  async findAll(params: IfindAllParams) {
     const [rows, count] = await Promise.all([
       this.prisma.users.findMany(params),
       this.prisma.users.count({
@@ -27,22 +27,22 @@ export class UserRepository {
     return { rows, count };
   }
 
-  async findOne(params: findOneParams) {
+  async findOne(params: IfindOneParams) {
     const findedUser = await this.prisma.users.findFirstOrThrow(params);
     return findedUser;
   }
 
-  async findOneByEmail(params: findOneUniqueParams) {
+  async findOneByEmail(params: IfindOneUniqueParams) {
     const findedUser = await this.prisma.users.findUnique(params);
     return findedUser;
   }
 
-  async update(params: updateParams) {
+  async update(params: IupdateParams) {
     await this.prisma.users.update(params);
     return true;
   }
 
-  async delete(params: deleteParams) {
+  async delete(params: IdeleteParams) {
     await this.prisma.users.delete(params);
     return true;
   }
