@@ -4,7 +4,6 @@ export const usersFilter = (query: any) => {
   const where: Prisma.UsersWhereInput = {
     deletedAt: null,
   };
-
   if (query?.search) {
     where.OR = [{ name: query.search }, { email: query.search }];
   }

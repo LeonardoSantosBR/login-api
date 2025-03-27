@@ -8,51 +8,59 @@ export class AuthService {
   ) {}
 
   async generateToken({ id, email }: { id: number; email: string }) {
-    const { accessToken, refreshToken } =
-      await this.authRepository.generateToken({
-        id,
-        email,
-      });
+    try {
+      const { accessToken, refreshToken } =
+        await this.authRepository.generateToken({
+          id,
+          email,
+        });
 
-    const userHasToken = await this.usersTokensRepository.findOneByToken({
-      where: {
-        userId: id,
-      },
-      select: {
-        id: true,
-        token: true,
-      },
-    });
-
-    if (!userHasToken) {
-      await this.usersTokensRepository.create({
-        data: {
-          userId: id,
-          token: accessToken,
-        },
-      });
-    } else {
-      await this.usersTokensRepository.update({
+      const userHasToken = await this.usersTokensRepository.findOneByToken({
         where: {
-          id: userHasToken.id,
+          userId: id,
         },
-        data: {
-          token: accessToken,
+        select: {
+          id: true,
+          token: true,
         },
       });
-    }
 
-    return { accessToken, refreshToken };
+      if (!userHasToken) {
+        await this.usersTokensRepository.create({
+          data: {
+            userId: id,
+            token: accessToken,
+          },
+        });
+      } else {
+        await this.usersTokensRepository.update({
+          where: {
+            id: userHasToken.id,
+          },
+          data: {
+            token: accessToken,
+          },
+        });
+      }
+
+      return { accessToken, refreshToken };
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   async verifyUserByToken(token: string) {
-    const user = await this.usersTokensRepository.findOneByToken({
-      where: {
-        token: token,
-      },
-    });
+    try {
+      const user = await this.usersTokensRepository.findOneByToken({
+        where: {
+          token: token,
+        },
+      });
 
-    return user;
+      return user;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   async isPasswordValid({
@@ -62,11 +70,15 @@ export class AuthService {
     password: string;
     userPassword: string;
   }) {
-    const isPasswordValid = await this.authRepository.validatePassword({
-      password,
-      userPassword,
-    });
+    try {
+      const isPasswordValid = await this.authRepository.validatePassword({
+        password,
+        userPassword,
+      });
 
-    return isPasswordValid;
+      return isPasswordValid;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 }

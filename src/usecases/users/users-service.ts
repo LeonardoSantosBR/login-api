@@ -1,104 +1,105 @@
 import bcrypt from "bcrypt";
 import { UserRepository } from "../../repositories/users/users-repository";
 import { UserDto } from "./users-dto";
-import { paginationService } from "../../helpers/pagination";
 import { usersFilter } from "./filter/users.filter";
 import { paginationPrisma } from "../../helpers/pagination";
 import { paginationHelper } from "../../helpers/pagination";
+import { Prisma } from "@prisma/client";
+
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(data: UserDto) {
-    const { password, ...rest } = data;
+    try {
+      const { password, ...rest } = data;
 
-    const userAlreadyExists = await this.userRepository.findOneByEmail({
-      where: {
-        email: data.email,
-      },
-    });
+      const userAlreadyExists = await this.userRepository.findOneByEmail({
+        where: {
+          email: data.email,
+        },
+      });
 
-    if (userAlreadyExists) {
-      throw new Error("Email ja existe.");
+      if (userAlreadyExists) {
+        throw new Error("Email ja existe.");
+      }
+      const newUser = await this.userRepository.create({
+        data: {
+          ...rest,
+          password: bcrypt.hashSync(data.password, 10),
+        },
+      });
+      return newUser;
+    } catch (error: any) {
+      throw new Error(error);
     }
-    const newUser = await this.userRepository.create({
-      data: {
-        ...rest,
-        password: bcrypt.hashSync(data.password, 10),
-      },
-    });
-    return newUser;
   }
 
   async findAll(query: any) {
-    const page = Number(query?.page);
-    const limit = Number(query?.limit);
-    const orderBy = query?.orderBy;
-    const where = usersFilter(query);
+    try {
+      const page = Number(query?.page);
+      const limit = Number(query?.limit);
+      const orderBy = query?.orderBy;
+      const where = usersFilter(query);
 
-    const data = await this.userRepository.findAll({
-      where,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-      orderBy,
-      ...paginationPrisma(limit, page),
-    });
+      const data = await this.userRepository.findAll({
+        where,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+        orderBy,
+        ...paginationPrisma(limit, page),
+      });
 
-    return paginationHelper(page, limit, data.count, data);
-  }
-
-  async findOne(
-    id: number,
-    options?: {
-      where?: any;
-      select?: any;
-      include?: any;
+      return paginationHelper(page, limit, data.count, data);
+    } catch (error: any) {
+      throw new Error(error);
     }
-  ) {
-    const optionsParams = paginationService({
-      where: {
-        id: id,
-        ...options?.where,
-      },
-      select: options?.select,
-      include: options?.include,
-    });
-
-    const data = await this.userRepository.findOne(optionsParams);
-    return data;
   }
 
-  async findOneByEmail(email: string) {
-    const data = await this.userRepository.findOneByEmail({
-      where: {
-        email: email,
-      },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-      },
-    });
+  async findOne(id: number, args?: Prisma.UsersFindFirstArgs) {
+    try {
+      const where = args?.where || { id, deleted_at: null };
+      const data = await this.userRepository.findOne({ where, ...args });
+      if (!data) throw new Error("Não foi encontrado usuário.");
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
 
-    return data;
+  async findOneByEmail(args: Prisma.UsersFindUniqueArgs) {
+    try {
+      const data = await this.userRepository.findOneByEmail(args);
+      return data;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   async patch(id: number, data: UserDto) {
-    await this.userRepository.update({
-      where: {
-        id: id,
-      },
-      data: data,
-    });
+    try {
+      await this.userRepository.update({
+        where: {
+          id: id,
+        },
+        data: data,
+      });
 
-    return true;
+      return true;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 
   async delete(id: number) {
-    await this.userRepository.delete({
-      where: { id: id },
-    });
+    try {
+      await this.userRepository.delete({
+        where: { id: id },
+      });
+      return true;
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 }

@@ -39,10 +39,13 @@ export class UsersController {
 
   async findOne(request: Request, response: Response) {
     try {
-      const data = await this.userService.findOne(
-        Number(request.params.id),
-        request.query
-      );
+      const data = await this.userService.findOne(Number(request.params.id), {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      });
       response.status(200).json(data);
     } catch (error: any) {
       return response.status(500).json({

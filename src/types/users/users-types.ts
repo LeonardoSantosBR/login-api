@@ -15,14 +15,14 @@ export interface findAllParams {
 }
 
 export interface findOneParams {
-  where?: Prisma.UsersWhereUniqueInput;
-  include?: Prisma.UsersInclude;
-  select?: Prisma.UsersSelect;
+  where?: Prisma.UsersWhereInput;
+  include?: Prisma.UsersInclude | null;
+  select?: Prisma.UsersSelect | null;
 }
 
 export interface findOneUniqueParams {
   where: Prisma.UsersWhereUniqueInput;
-  select?: Prisma.UsersSelect;
+  select?: Prisma.UsersSelect | null;
 }
 
 export interface updateParams {

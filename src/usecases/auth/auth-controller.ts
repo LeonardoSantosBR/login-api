@@ -11,7 +11,12 @@ export class AuthController {
   async signIn(request: Request, response: Response) {
     try {
       const { email, password } = request.body;
-      const user = await this.userService.findOneByEmail(email);
+      const user = await this.userService.findOneByEmail({
+        where: {
+          email,
+        },
+        select: { id: true, name: true, email: true },
+      });
 
       if (!user) {
         return response.status(400).send({
