@@ -15,7 +15,7 @@ export class AuthController {
         where: {
           email,
         },
-        select: { id: true, name: true, email: true },
+        select: { id: true, name: true, email: true, password: true },
       });
 
       if (!user) {
