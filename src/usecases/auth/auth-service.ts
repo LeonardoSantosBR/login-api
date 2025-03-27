@@ -25,27 +25,25 @@ export class AuthService {
         },
       });
 
-      if (!userHasToken) {
-        await this.usersTokensRepository.create({
-          data: {
-            token: accessToken,
-            tokens: {
-              connect: {
-                id: id,
+      !userHasToken
+        ? await this.usersTokensRepository.create({
+            data: {
+              token: accessToken,
+              tokens: {
+                connect: {
+                  id: id,
+                },
               },
             },
-          },
-        });
-      } else {
-        await this.usersTokensRepository.update({
-          where: {
-            id: userHasToken.id,
-          },
-          data: {
-            token: accessToken,
-          },
-        });
-      }
+          })
+        : await this.usersTokensRepository.update({
+            where: {
+              id: userHasToken.id,
+            },
+            data: {
+              token: accessToken,
+            },
+          });
 
       return { accessToken, refreshToken };
     } catch (error: any) {
