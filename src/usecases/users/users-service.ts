@@ -60,9 +60,11 @@ export class UserService {
 
   async findOne(id: number, args?: Prisma.UsersFindFirstArgs) {
     try {
-      const where = args?.where || { id, deleted_at: null };
+      const where = args?.where || { id, deletedAt: null };
       const data = await this.userRepository.findOne({ where, ...args });
       if (!data) throw new Error("Não foi encontrado usuário.");
+
+      return data;
     } catch (error: any) {
       throw new Error(error);
     }

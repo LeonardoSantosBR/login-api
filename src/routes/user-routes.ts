@@ -12,7 +12,7 @@ userRouter.get("/users", (request, response) => {
 });
 
 userRouter.get("/users/:id", (request, response) => {
-  return userController.findAll(request, response);
+  return userController.findOne(request, response);
 });
 
 userRouter.patch("/users/:id", (request, response) => {

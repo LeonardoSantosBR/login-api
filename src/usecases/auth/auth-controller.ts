@@ -42,6 +42,7 @@ export class AuthController {
         });
 
       return response.status(200).send({
+        id: user.id,
         name: user.name,
         email: user.email,
         accessToken,
