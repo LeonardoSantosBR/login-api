@@ -79,12 +79,10 @@ export class UserService {
     }
   }
 
-  async patch(id: number, data: UserDto) {
+  async patch(where: Prisma.UsersWhereUniqueInput, data: UserDto) {
     try {
       await this.userRepository.update({
-        where: {
-          id: id,
-        },
+        where,
         data: data,
       });
 
