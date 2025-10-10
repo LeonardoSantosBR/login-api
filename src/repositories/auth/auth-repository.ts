@@ -11,7 +11,6 @@ export class AuthRepository {
     const accessToken = jwt.sign({ id, email }, envTokenSecret, {
       expiresIn: "15m",
     });
-
     return {
       accessToken: accessToken,
       refreshToken: refreshToken,

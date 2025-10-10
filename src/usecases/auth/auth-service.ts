@@ -14,7 +14,6 @@ export class AuthService {
           id,
           email,
         });
-
       const userHasToken = await this.usersTokensRepository.findOneByToken({
         where: {
           userId: id,
@@ -24,15 +23,12 @@ export class AuthService {
           token: true,
         },
       });
-
       !userHasToken
         ? await this.usersTokensRepository.create({
-            data: {
-              token: accessToken,
-              tokens: {
-                connect: {
-                  id: id,
-                },
+            token: accessToken,
+            tokens: {
+              connect: {
+                id: id,
               },
             },
           })
@@ -44,7 +40,6 @@ export class AuthService {
               token: accessToken,
             },
           });
-
       return { accessToken, refreshToken };
     } catch (error: any) {
       throw new Error(error);
@@ -58,7 +53,6 @@ export class AuthService {
           token: token,
         },
       });
-
       return user;
     } catch (error: any) {
       throw new Error(error);
@@ -77,7 +71,6 @@ export class AuthService {
         password,
         userPassword,
       });
-
       return isPasswordValid;
     } catch (error: any) {
       throw new Error(error);

@@ -17,30 +17,25 @@ export class AuthController {
         },
         select: { id: true, name: true, email: true, password: true },
       });
-
       if (!user) {
         return response.status(400).send({
           message: "Email não encontrado.",
         });
       }
-
       const isPasswordValid = await this.authService.isPasswordValid({
         password: password,
         userPassword: user.password,
       });
-
       if (!isPasswordValid) {
         return response.status(400).send({
           message: "Senha inválida.",
         });
       }
-
       const { accessToken, refreshToken } =
         await this.authService.generateToken({
           id: user.id,
           email: user.email,
         });
-
       return response.status(200).send({
         id: user.id,
         name: user.name,
@@ -58,15 +53,12 @@ export class AuthController {
   async signToken(request: Request, response: Response) {
     try {
       const { token } = request.body;
-
       if (!token) {
         return response.status(400).send({
           message: "Token não enviado.",
         });
       }
-
       const tokenExists = await this.authService.verifyUserByToken(token);
-
       if (tokenExists) {
         return response.status(200).send({
           message: "Usuário logado com sucesso.",

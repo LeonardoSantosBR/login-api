@@ -12,22 +12,21 @@ export class UserService {
   async create(data: UserDto) {
     try {
       const { password, ...rest } = data;
-
       const userAlreadyExists = await this.userRepository.findOneByEmail({
         where: {
           email: data.email,
         },
       });
-
       if (userAlreadyExists) {
         throw new Error("Email ja existe.");
       }
-      const newUser = await this.userRepository.create({
-        data: {
+      const passwordHashed = bcrypt.hashSync(data.password, 10);
+      const newUser = await this.userRepository.create(
+        {
           ...rest,
-          password: bcrypt.hashSync(data.password, 10),
+          password: passwordHashed,
         },
-      });
+      );
       return newUser;
     } catch (error: any) {
       throw new Error(error);
@@ -40,7 +39,6 @@ export class UserService {
       const limit = Number(query?.limit);
       const orderBy = query?.orderBy;
       const where = usersFilter(query);
-
       const data = await this.userRepository.findAll({
         where,
         select: {
@@ -51,7 +49,6 @@ export class UserService {
         orderBy,
         ...paginationPrisma(limit, page),
       });
-
       return paginationHelper(page, limit, data.count, data);
     } catch (error: any) {
       throw new Error(error);
@@ -63,7 +60,6 @@ export class UserService {
       const where = args?.where || { id, deletedAt: null };
       const data = await this.userRepository.findOne({ where, ...args });
       if (!data) throw new Error("Não foi encontrado usuário.");
-
       return data;
     } catch (error: any) {
       throw new Error(error);
@@ -85,7 +81,6 @@ export class UserService {
         where,
         data: data,
       });
-
       return true;
     } catch (error: any) {
       throw new Error(error);
