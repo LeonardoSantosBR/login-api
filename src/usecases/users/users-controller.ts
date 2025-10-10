@@ -67,7 +67,7 @@ export class UsersController {
         });
       }
       await this.userService.patch({ id: Number(id) }, body);
-      return response.status(204).send("Usuário atualizado com sucesso.");
+      return response.status(200).send("Usuário atualizado com sucesso.");
     } catch (error: any) {
       return response.status(500).json({
         message: error.message || "unexpected error",
